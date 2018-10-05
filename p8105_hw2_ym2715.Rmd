@@ -151,7 +151,11 @@ Q3: Make a histogram of “Excellent” response values in the year 2002.
 
 ```{r}
 ggplot(brfss_overall_health, aes(x = excellent)) +
-  geom_histogram()
+  geom_histogram() +
+  labs(
+    title = "Plot for excellent response values in 2002",
+    x = "proportion of responses that were excellent"
+  )
 ```
 
 Q4: Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.
@@ -160,7 +164,14 @@ Q4: Make a scatterplot showing the proportion of “Excellent” response values
 brfss_overall_health %>% 
   filter(location_desc == "NY - New York County" | location_desc == "NY - Queens County") %>% 
   ggplot(aes(x = year, y = excellent, color = location_desc)) +
-  geom_point()
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "BRFSS response plot in New York and Queens",
+    x = "Year",
+    y = "Proportion of responses that were excellent"
+  ) +
+  theme(legend.position = "bottom")
 ```
 
 
