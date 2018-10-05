@@ -1,13 +1,14 @@
 ---
 title: "P8105_hw2_ym2715"
 author: "Yizhi Ma"
-date: "10/4/2018"
+date: "10/5/2018"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(readxl)
 ```
 
 ## Problem 1
@@ -21,4 +22,37 @@ subway_tidy_df = subway_df %>%
   distinct() %>% 
   mutate(entry = if_else(entry == "YES", TRUE, FALSE)) # Convert the entry variable from character to a logical variable
 ```
+
+So far, I've used "janitor::clean_names" to keep the names consistent among variables. Then I select the variables that I need and use "distinct" to remove rows that are exactly the same.  
+  
+The current data set -- subway_tidy_df -- contains some information about NYC subway system, including lines, different stations on each line with their location expressed in latitude and longitude. It tells us whether the entry is avaliable, which entrence type it is, if there's vending and ADA compliant, and also, which train stops at the stations.  
+  
+The dataset is now a 684 x 19 table. I name it with "tidy" but I don't think it's tidy enough, the route part seems a little bit annoying.
+
+```{r}
+subway_tidy_df %>% 
+  distinct(line, station_name) %>% 
+  nrow()
+```
+There're 465 subway stations in NYC.
+
+```{r}
+subway_tidy_df %>% 
+  distinct(line, station_name, ada) %>% 
+  count(ada)
+```
+There're 84 stations that area ADA compliant.
+
+```{r}
+x = subway_df %>% 
+      filter(entry == 'YES' & vending == 'NO') %>% 
+      nrow()
+proportion = x / nrow(subway_df)
+proportion
+```
+The proportion of station entrances / exits without vending allow entrance is 0.0369379
+
+
+
+
 
