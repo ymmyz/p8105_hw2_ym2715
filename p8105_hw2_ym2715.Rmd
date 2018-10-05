@@ -13,7 +13,7 @@ library(readxl)
 
 ## Problem 1
 
-```{r}
+```{r read and clean data for Problem1}
 subway_df = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names()
 
@@ -29,21 +29,21 @@ The current data set -- subway_tidy_df -- contains some information about NYC su
   
 The dataset is now a 684 x 19 table. I name it with "tidy" but I don't think it's tidy enough, the route part seems a little bit annoying.
 
-```{r}
+```{r calculate distinct stations}
 subway_tidy_df %>% 
   distinct(line, station_name) %>% 
   nrow()
 ```
 There're 465 subway stations in NYC.
 
-```{r}
+```{r calculate stations with ADA}
 subway_tidy_df %>% 
   distinct(line, station_name, ada) %>% 
   count(ada)
 ```
 There're 84 stations that area ADA compliant.
 
-```{r}
+```{r calculate vending problem}
 entry_without_vending = subway_df %>% 
       filter(entry == 'YES' & vending == 'NO') %>% 
       nrow()
@@ -51,7 +51,7 @@ entry_without_vending / nrow(subway_df)
 ```
 The proportion of station entrances / exits without vending allow entrance is 0.0369379
 
-```{r}
+```{r route A related calculation}
 subway_tidy_df %>% 
   distinct(line, station_name, route1, ada) %>% 
   filter(route1 == "A") %>% 
@@ -70,7 +70,7 @@ According to the results, 60 distinct stations that serve the A train, and 17 of
 
 Read and Clean Mr. Trash Wheel dataset
 
-```{r}
+```{r Read and Clean Mr. Trash Wheel dataset}
 trashwheel_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "Mr. Trash Wheel", range = cell_cols("A:N")) %>% 
   janitor::clean_names() %>% 
   na.omit(dumpster) %>%
@@ -79,7 +79,7 @@ trashwheel_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28
 
 Read and clean precipitation data for 2016 and 2017
 
-```{r}
+```{r Read and clean precipitation data for 2016 and 2017}
 prec_2016_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "2016 Precipitation", range = "A2:B14") %>% 
   janitor::clean_names() %>% 
   mutate(year = 2016) %>% 
@@ -93,7 +93,7 @@ prec_2017_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.
 
 Combine the 2016 & 2017 datasets
 
-```{r}
+```{r Combine the 2016 & 2017 datasets}
 prec_df = bind_rows(prec_2016_df, prec_2017_df) %>% 
   mutate(month = month.name[month])
 ```
@@ -104,13 +104,13 @@ prec_df = bind_rows(prec_2016_df, prec_2017_df) %>%
   
   the total precipitation in 2017 is 32.93
  
-```{r}
+```{r calculate total prec in 2017}
   sum(prec_2017_df$total)
 ```
 
 the median number of sports balls in a dumpster in 2016 is 26
 
-```{r}
+```{r calculate median of sports balls in 2016}
 median(filter(trashwheel_df, year == 2016) $ sports_balls)
 ```
 
@@ -118,7 +118,7 @@ median(filter(trashwheel_df, year == 2016) $ sports_balls)
 
 Load BRFSS data and do some data cleaning as required
 
-```{r}
+```{r read and clean data from BRFSS}
 library(p8105.datasets)
 
 brfss_smart2010 = p8105.datasets::brfss_smart2010
@@ -136,7 +136,7 @@ brfss_overall_health = brfss_smart2010 %>%
 
 Q1: How many unique locations are included in the dataset? Is every state represented? What state is observed the most?
 
-```{r}
+```{r question1}
 brfss_overall_health %>% 
   distinct(location_desc) %>% 
   nrow()    # number of unique locations 
@@ -157,7 +157,7 @@ So there are 400 unique locations, all 51 states are represented and NJ is the m
   
 Q2: In 2002, what is the median of the “Excellent” response value?
 
-```{r}
+```{r question2}
 median(filter(brfss_overall_health, year == 2002) $ excellent)
 ```
 
@@ -165,7 +165,7 @@ The median of the “Excellent” response value in 2002 was 23.6.
   
 Q3: Make a histogram of “Excellent” response values in the year 2002.
 
-```{r}
+```{r question3}
 ggplot(brfss_overall_health, aes(x = excellent)) +
   geom_histogram() +
   labs(
@@ -176,7 +176,7 @@ ggplot(brfss_overall_health, aes(x = excellent)) +
 
 Q4: Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.
 
-```{r}
+```{r question4}
 brfss_overall_health %>% 
   filter(location_desc == "NY - New York County" | location_desc == "NY - Queens County") %>% 
   ggplot(aes(x = year, y = excellent, color = location_desc)) +
