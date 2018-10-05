@@ -98,5 +98,23 @@ the median number of sports balls in a dumpster in 2016 is 26
 median(filter(trashwheel_df, year == 2016) $ sports_balls)
 ```
 
+## Problem 3
+
+Load BRFSS data and do some data cleaning as required
+
+```{r}
+library(p8105.datasets)
+
+brfss_smart2010 = p8105.datasets::brfss_smart2010
+
+brfss_overall_health = brfss_smart2010 %>% 
+  janitor::clean_names() %>% 
+  filter(topic == "Overall Health") %>% 
+  select(-class, -topic, -question, -sample_size, - (confidence_limit_low:geo_location)) %>% 
+  spread(key = response, value = data_value) %>% 
+  janitor::clean_names() %>% 
+  mutate(excellent_or_very_good = excellent + very_good) %>% 
+  select(year, location_abbr = locationabbr, location_desc = locationdesc, excellent_or_very_good, excellent, very_good, good, fair, poor)
+```
 
 
