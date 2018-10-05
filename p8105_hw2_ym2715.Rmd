@@ -56,9 +56,47 @@ The proportion of station entrances / exits without vending allow entrance is 0.
 
 ## Problem 2
 
+Read and Clean Mr. Trash Wheel dataset
+
 ```{r}
 trashwheel_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "Mr. Trash Wheel", range = cell_cols("A:N")) %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  na.omit(dumpster) %>%
+  mutate(sports_balls = as.integer(round(sports_balls)))
 ```
+
+Read and clean precipitation data for 2016 and 2017
+
+```{r}
+prec_2016_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "2016 Precipitation", range = "A2:B14") %>% 
+  janitor::clean_names() %>% 
+  mutate(year = 2016) %>% 
+  select(year, everything())
+
+prec_2017_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>% 
+  janitor::clean_names() %>% 
+  mutate(year = 2017) %>% 
+  select(year, everything())
+```
+
+Combine the 2016 & 2017 datasets
+
+```{r}
+prec_df = bind_rows(prec_2016_df, prec_2017_df) %>% 
+  mutate(month = month.name[month])
+```
+
+the total precipitation in 2017 is 32.93
+ 
+```{r}
+  sum(prec_2017_df$total)
+```
+
+the median number of sports balls in a dumpster in 2016 is 26
+
+```{r}
+median(filter(trashwheel_df, year == 2016) $ sports_balls)
+```
+
 
 
