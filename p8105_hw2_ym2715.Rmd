@@ -51,6 +51,19 @@ entry_without_vending / nrow(subway_df)
 ```
 The proportion of station entrances / exits without vending allow entrance is 0.0369379
 
+```{r}
+subway_tidy_df %>% 
+  distinct(line, station_name, route1, ada) %>% 
+  filter(route1 == "A") %>% 
+  nrow()  # the number of distinct stations that serve the A train
+
+subway_tidy_df %>% 
+  distinct(line, station_name, route1, ada) %>% 
+  filter(route1 == "A") %>% 
+  count(ada) # the number of distinct stations with ADA compliant that serve the A train
+```
+
+According to the results, 60 distinct stations that serve the A train, and 17 of those are ADA compliant.  
 
 
 ## Problem 2
