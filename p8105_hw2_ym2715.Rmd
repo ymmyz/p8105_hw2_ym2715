@@ -54,5 +54,11 @@ The proportion of station entrances / exits without vending allow entrance is 0.
 
 
 
+## Problem 2
+
+```{r}
+trashwheel_df = readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", sheet = "Mr. Trash Wheel", range = cell_cols("A:N")) %>% 
+  janitor::clean_names()
+```
 
 
