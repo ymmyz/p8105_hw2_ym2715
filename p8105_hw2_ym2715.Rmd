@@ -114,7 +114,53 @@ brfss_overall_health = brfss_smart2010 %>%
   spread(key = response, value = data_value) %>% 
   janitor::clean_names() %>% 
   mutate(excellent_or_very_good = excellent + very_good) %>% 
-  select(year, location_abbr = locationabbr, location_desc = locationdesc, excellent_or_very_good, excellent, very_good, good, fair, poor)
+  select(year, location_abbr = locationabbr, location_desc = locationdesc, excellent_or_very_good, excellent, very_good, good, fair, poor) %>% 
+  na.omit()
+```
+
+Q1: How many unique locations are included in the dataset? Is every state represented? What state is observed the most?
+
+```{r}
+brfss_overall_health %>% 
+  distinct(location_desc) %>% 
+  nrow()    # number of unique locations 
+
+brfss_overall_health %>% 
+  distinct(location_abbr) %>% 
+  nrow()   # number of state
+
+brfss_overall_health %>% 
+  group_by(location_abbr) %>% 
+  mutate(N = n()) %>% 
+  distinct(location_abbr, N) %>% 
+  arrange(desc(N))   # number of time of being observed for each state
+
+```
+
+So there are 400 unique locations, all 51 states are represented and NJ is the most observed state.  
+  
+Q2: In 2002, what is the median of the “Excellent” response value?
+
+```{r}
+median(filter(brfss_overall_health, year == 2002) $ excellent)
+```
+
+The median of the “Excellent” response value in 2002 was 23.6.  
+  
+Q3: Make a histogram of “Excellent” response values in the year 2002.
+
+```{r}
+ggplot(brfss_overall_health, aes(x = excellent)) +
+  geom_histogram()
+```
+
+Q4: Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.
+
+```{r}
+brfss_overall_health %>% 
+  filter(location_desc == "NY - New York County" | location_desc == "NY - Queens County") %>% 
+  ggplot(aes(x = year, y = excellent, color = location_desc)) +
+  geom_point()
 ```
 
 
