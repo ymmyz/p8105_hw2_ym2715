@@ -44,10 +44,10 @@ subway_tidy_df %>%
 There're 84 stations that area ADA compliant.
 
 ```{r}
-entrt_without_vending = subway_df %>% 
+entry_without_vending = subway_df %>% 
       filter(entry == 'YES' & vending == 'NO') %>% 
       nrow()
-entrt_without_vending / nrow(subway_df)
+entry_without_vending / nrow(subway_df)
 ```
 The proportion of station entrances / exits without vending allow entrance is 0.0369379
 
