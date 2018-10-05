@@ -128,7 +128,15 @@ $(document).ready(function () {
 </div>
 
 
-
+<div id="problem-1" class="section level2">
+<h2>Problem 1</h2>
+<pre class="r"><code>subway_df = read.csv(&quot;./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv&quot;) %&gt;% 
+  janitor::clean_names()
+subway_tidy_df = subway_df %&gt;% 
+  select(line, station_name, station_latitude, station_longitude, entry, vending, entrance_type, ada, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11) %&gt;% 
+  distinct() %&gt;% 
+  mutate(entry = if_else(entry == &quot;YES&quot;, TRUE, FALSE)) # Convert the entry variable from character to a logical variable</code></pre>
+</div>
 
 
 

@@ -9,3 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
+
+## Problem 1
+
+```{r}
+subway_df = read.csv("./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
+  janitor::clean_names()
+subway_tidy_df = subway_df %>% 
+  select(line, station_name, station_latitude, station_longitude, entry, vending, entrance_type, ada, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11) %>% 
+  distinct() %>% 
+  mutate(entry = if_else(entry == "YES", TRUE, FALSE)) # Convert the entry variable from character to a logical variable
+```
+
